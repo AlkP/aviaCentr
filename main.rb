@@ -25,7 +25,7 @@ private
 def new_request
   begin_time = Time.now
   @threads << Thread.new do
-    u = JSON.load( Net::HTTP.get( URI.parse( yield )))
+    u = JSON.parse( Net::HTTP.get( URI.parse( yield )))
     if u['error']
       @results[:errors] = [] unless @results[:errors]
       @results[:errors] << u
