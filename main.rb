@@ -16,8 +16,6 @@ get '/sleepy/' do
   @threads.each { |thr| thr.join }
 
   @results.to_json
-  
-  
 end
 
 private
