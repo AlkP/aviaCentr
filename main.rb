@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'net/http'
+require 'json'
 
 get '/sleepy/' do
   @threads = []
@@ -23,14 +24,17 @@ private
 def new_request
   begin_time = Time.now
   @threads << Thread.new do
-    u = eval( Net::HTTP.get( URI.parse( yield )))
+    u = JSON.load( Net::HTTP.get( URI.parse( yield )))
+    puts "-" * 50
+    puts u
+    puts "-" * 50
     if u[:error]
       @results[:errors] = [] unless @results[:errors]
       @results[:errors] << u
     else
       @results[:data] << u
     end
-    @results[:sum] += u[:slept] if u[:slept]
+    @results[:sum] += u['slept'] if u['slept']
     @results[:total] += Time.now - begin_time
   end
 end
